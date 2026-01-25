@@ -11,6 +11,9 @@ import java.time.Duration;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
+/**
+ * Класс заглавной страницы Яндекс Самокат
+ */
 public class YandexScooterHomePage {
     private final WebDriver driver;
     private final String faqSpoilerTitle;
