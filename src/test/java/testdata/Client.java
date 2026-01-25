@@ -1,10 +1,10 @@
 package testdata;
 
 public class Client {
-    private String firstName;
-    private String familyName;
-    private String address;
-    private String telNumber = "+79998887766";
+    private final String firstName;
+    private final String familyName;
+    private final String address;
+    private final String telNumber;
 
     public Client(String firstName, String familyName, String address, String telNumber) {
         this.firstName = firstName;
