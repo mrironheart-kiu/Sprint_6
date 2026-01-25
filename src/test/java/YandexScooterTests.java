@@ -1,7 +1,6 @@
 import constants.Browser;
 import factory.WebDriverFactory;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
@@ -22,10 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class YandexScooterTests {
     private WebDriver driver;
-
-//    @BeforeEach
-//    void setUp() {
-//    }
 
     @ParameterizedTest
     @MethodSource("testdata.ParameterizedTestData#faqTestData")
