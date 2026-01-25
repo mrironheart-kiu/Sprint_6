@@ -9,8 +9,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+/**
+ * Класс хедера страниц Яндекс Самокат
+ */
 public class YandexScooterHeaderPage {
     private final WebDriver driver;
+    // Кнопка "Заказать" в хедере
     private final By faqSpoilerTitle = By.className("Button_Button__ra12g");
 
     public YandexScooterHeaderPage(WebDriver driver) {
