@@ -55,7 +55,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Вспомогательный методы для заполнения значений полей на странце заказа Яндекс Самокат
-     * @param fieldName
+     * @param fieldName селектор для веб-элемента
      */
     private void checkAndClearField(By fieldName){
         driver.findElement(fieldName).isEnabled();
@@ -64,7 +64,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Имя" переданный параметр
-     * @param newFirstName
+     * @param newFirstName новое значение для заполнения поля
      */
     public void setFirstName(String newFirstName) {
         checkAndClearField(firstNameField);
@@ -73,7 +73,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Фамилия" переданный параметр
-     * @param newFamilyName
+     * @param newFamilyName новое значение для заполнения поля
      */
     public void setFamilyName(String newFamilyName) {
         checkAndClearField(familyNameField);
@@ -82,7 +82,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Фамилия" переданный параметр
-     * @param newAddress
+     * @param newAddress новое значение для заполнения поля
      */
     public void setAddress(String newAddress) {
         checkAndClearField(addressField);
@@ -99,7 +99,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Телефон" переданный параметр
-     * @param newTelNumber
+     * @param newTelNumber новое значение для заполнения поля
      */
     public void setTelNumber(String newTelNumber) {
         checkAndClearField(telNumberField);
@@ -153,10 +153,10 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод формирует заказ самоката через кнопку "Заказать" в хедере страницы
-     * @param newFirstName
-     * @param newFamilyName
-     * @param newAddress
-     * @param newTelNumber
+     * @param newFirstName новое значение для заполнения поля "Имя"
+     * @param newFamilyName новое значение для заполнения поля "Фамилия"
+     * @param newAddress новое значение для заполнения поля "Адресс"
+     * @param newTelNumber новое значение для заполнения поля "Номер телефона"
      */
     public void createOrderViaHeaderOrderButton(
             String newFirstName, String newFamilyName,
