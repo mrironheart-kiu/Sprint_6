@@ -58,6 +58,29 @@ public class YandexScooterTests {
                 "Не найдено окно об успешном формировании заказа");
     }
 
+    @ParameterizedTest
+    @MethodSource("testdata.ParameterizedTestData#orderTestData")
+    void completeOrderViaMiddleOrderButton(Browser browser, Client client) {
+        driver = new WebDriverFactory().getWebDriver(browser);
+        driver.get(URL_MAIN_PAGE);
+        YandexScooterHomePage objHomePage = new YandexScooterHomePage(driver);
+        objHomePage.clickOrderButton();
+
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
+
+        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage.createOrderViaHeaderOrderButton(
+                client.getFirstName(),
+                client.getFamilyName(),
+                client.getAddress(),
+                client.getTelNumber()
+        );
+
+        assertTrue(objOrderPage.getCompleteOrderTitleText().contains(TITLE_COMPLETE_ORDER_FORM),
+                "Не найдено окно об успешном формировании заказа");
+    }
+
     @AfterEach
     void tearDown() {
         if (driver != null) {
