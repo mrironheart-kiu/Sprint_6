@@ -1,6 +1,7 @@
 import constants.Browser;
 import factory.WebDriverFactory;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +13,8 @@ import pom.YandexScooterOrderPage;
 import testdata.Client;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Set;
 
 import static constants.FormTitle.*;
 import static constants.Url.*;
@@ -78,7 +81,41 @@ public class YandexScooterTests {
         );
 
         assertTrue(objOrderPage.getCompleteOrderTitleText().contains(TITLE_COMPLETE_ORDER_FORM),
-                "Не найдено окно об успешном формировании заказа");
+                "Не найдено форма об успешном формировании заказа");
+    }
+
+    @ParameterizedTest
+    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    void scooterLogoRedirectsToMainPage(Browser browser) {
+        driver = new WebDriverFactory().getWebDriver(browser);
+        driver.get(URL_ORDER_PAGE);
+
+        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage.clickHeaderScooterLogo();
+
+        assertEquals(URL_MAIN_PAGE + "/", driver.getCurrentUrl(),
+                "Не выполнен переход на главную страницу Яндекс Самокат");
+    }
+
+    @ParameterizedTest
+    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    void scooterLogoRedirectsToYandexMainPage(Browser browser) {
+        driver = new WebDriverFactory().getWebDriver(browser);
+        driver.get(URL_MAIN_PAGE);
+
+        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage.clickHeaderYandexLogo();
+
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.numberOfWindowsToBe(2));
+        Set<String> windowIds = driver.getWindowHandles();
+        ArrayList<String> tabs = new ArrayList<>(windowIds);
+        driver.switchTo().window(tabs.get(1));
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.urlToBe(URL_YANDEX_MAIN_PAGE));
+
+        assertEquals(URL_YANDEX_MAIN_PAGE, driver.getCurrentUrl(),
+                "Не выполнен переход на главную страницу Яндекс");
     }
 
     @AfterEach

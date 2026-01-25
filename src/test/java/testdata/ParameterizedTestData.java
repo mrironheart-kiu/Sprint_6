@@ -45,4 +45,13 @@ public class ParameterizedTestData {
                 Arguments.of(FIREFOX, new Client("Прохор", "Троцкий", "ул Пупинская", "+79996067788"))
         );
     }
+
+    private static Stream<Arguments> browserTestData() {
+        return Stream.of(
+                // Проверяем в Chrome
+                Arguments.of(CHROME),
+                // Проверяем в FireFox
+                Arguments.of(FIREFOX)
+        );
+    }
 }
