@@ -11,11 +11,11 @@ import java.time.Duration;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
-public class HomePageYandexScooter {
+public class YandexScooterHomePage {
     private final WebDriver driver;
     private final String faqSpoilerTitle;
 
-    public HomePageYandexScooter(WebDriver driver, String faqSpoilerTitle) {
+    public YandexScooterHomePage(WebDriver driver, String faqSpoilerTitle) {
         this.driver = driver;
         this.faqSpoilerTitle = faqSpoilerTitle;
     }
