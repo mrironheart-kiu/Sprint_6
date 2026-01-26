@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pom.YandexScooterHeaderPage;
 import pom.YandexScooterHomePage;
 import pom.YandexScooterOrderPage;
+import pom.YandexScooterTrackOrderPage;
 import testdata.Client;
 
 import java.time.Duration;
@@ -109,7 +110,7 @@ public class YandexScooterTests {
         ArrayList<String> tabs = new ArrayList<>(windowIds);
         driver.switchTo().window(tabs.get(1));
         new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlToBe(URL_YANDEX_MAIN_PAGE));
+                .until(ExpectedConditions.urlContains(URL_YANDEX_MAIN_PAGE));
 
         assertEquals(URL_YANDEX_MAIN_PAGE, driver.getCurrentUrl(),
                 "Не выполнен переход на главную страницу Яндекс");
@@ -189,6 +190,25 @@ public class YandexScooterTests {
         assertEquals(MESSAGE_ERROR_ORDER_PHONE,
                 objOrderPage.getErrorMessage(objOrderPage.getPhoneNumberField()),
                 "Текст ошибки не соответствует ожидаемому");
+    }
+
+    @ParameterizedTest
+    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @DisplayName("Отображается картинка о том что заказ не существует")
+    void trackOrderPageDisplaysErrorImage(Browser browser) {
+        driver = new WebDriverFactory().getWebDriver(browser);
+        driver.get(URL_MAIN_PAGE);
+
+        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage.clickOrderStatusButton();
+        objHeaderPage.clickOrderStatusConfirmButton();
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.urlContains(URL_TRACK_ORDER_PAGE));
+
+        YandexScooterTrackOrderPage objTrackOrderPage = new YandexScooterTrackOrderPage(driver);
+
+        assertTrue(objTrackOrderPage.checkTrackOrderErrorImageVisibility(),
+                "Картинка \"Такого заказа нет\" не отображается");
     }
 
     @AfterEach
