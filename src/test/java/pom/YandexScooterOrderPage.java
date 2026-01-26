@@ -132,6 +132,8 @@ public class YandexScooterOrderPage {
      */
     public void setMetroStation() {
         driver.findElement(metroStationField).click();
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.elementToBeClickable(driver.findElement(metroStation)));
         driver.findElement(metroStation).click();
     }
 
