@@ -20,6 +20,11 @@ public class YandexScooterHeaderPage {
     private final By scooterLogo = By.className("Header_LogoScooter__3lsAR");
     // Надпись "Яндекс" в логотипе в хедере
     private final By yandexLogo = By.className("Header_LogoYandex__3TSOI");
+    // Кнопка "Статус заказа" в хедере
+    private final By orderStatusButton = By.className("Header_Link__1TAG7");
+    // Кнопка "Go!" при вводе номера заказа в хедере
+    private final By orderStatusConfirmButton =
+            By.xpath("//button[contains(@class,'Header_Button__28dPO')]");
 
     public YandexScooterHeaderPage(WebDriver driver) {
         this.driver = driver;
@@ -48,5 +53,21 @@ public class YandexScooterHeaderPage {
      */
     public void clickHeaderYandexLogo() {
         driver.findElement(yandexLogo).click();
+    }
+
+    /**
+     * Метод нажимает на кнопку "Статус заказа" в хедере
+     */
+    public void clickOrderStatusButton() {
+        driver.findElement(orderStatusButton).click();
+    }
+
+    /**
+     * Метод нажимает на кнопку "Go!" при вводе номера заказа в хедере
+     */
+    public void clickOrderStatusConfirmButton() {
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.elementToBeClickable(orderStatusConfirmButton));
+        driver.findElement(orderStatusConfirmButton).click();
     }
 }
