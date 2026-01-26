@@ -67,7 +67,7 @@ public class YandexScooterHeaderPage {
      */
     public void clickOrderStatusConfirmButton() {
         new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(orderStatusConfirmButton));
+                .until(ExpectedConditions.visibilityOfElementLocated(orderStatusConfirmButton));
         driver.findElement(orderStatusConfirmButton).click();
     }
 }
