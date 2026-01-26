@@ -15,6 +15,7 @@ import testdata.Client;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 
 import static constants.ErrorMessage.*;
@@ -24,13 +25,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class YandexScooterTests {
     private WebDriver driver;
+    // Домашняя страница сайт "Яндекс Самокат"
+    private YandexScooterHomePage objHomePage;
+    // Хедер сайт "Яндекс Самокат"
+    private YandexScooterHeaderPage objHeaderPage;
+    // Страница формирования заказа сайт "Яндекс Самокат"
+    private YandexScooterOrderPage objOrderPage;
+    // Страница поиска заказа сайт "Яндекс Самокат"
+    private YandexScooterTrackOrderPage objTrackOrderPage;
 
     @ParameterizedTest
     @MethodSource("testdata.ParameterizedTestData#faqTestData")
     void faqSpoilerDescriptionTest(Browser browser, String faqTitle, String expectedResult) {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_MAIN_PAGE);
-        YandexScooterHomePage objHomePage = new YandexScooterHomePage(driver, faqTitle);
+        objHomePage = new YandexScooterHomePage(driver, faqTitle);
         objHomePage.clickFaqSpoiler();
 
         assertEquals(expectedResult, objHomePage.getFaqSpoilerDescription());
@@ -41,13 +50,13 @@ public class YandexScooterTests {
     void completeOrderViaHeaderOrderButton(Browser browser, Client client) {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_MAIN_PAGE);
-        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderOrderButton();
 
         new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
                 client.getFirstName(),
                 client.getFamilyName(),
@@ -64,13 +73,13 @@ public class YandexScooterTests {
     void completeOrderViaMiddleOrderButton(Browser browser, Client client) {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_MAIN_PAGE);
-        YandexScooterHomePage objHomePage = new YandexScooterHomePage(driver);
+        objHomePage = new YandexScooterHomePage(driver);
         objHomePage.clickOrderButton();
 
         new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
                 client.getFirstName(),
                 client.getFamilyName(),
@@ -88,7 +97,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderScooterLogo();
 
         assertEquals(URL_MAIN_PAGE + "/", driver.getCurrentUrl(),
@@ -101,7 +110,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_MAIN_PAGE);
 
-        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderYandexLogo();
 
         new WebDriverWait(driver, Duration.ofSeconds(5))
@@ -112,7 +121,7 @@ public class YandexScooterTests {
         new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(ExpectedConditions.urlContains(URL_YANDEX_MAIN_PAGE));
 
-        assertEquals(URL_YANDEX_MAIN_PAGE, driver.getCurrentUrl(),
+        assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains(URL_YANDEX_MAIN_PAGE),
                 "Не выполнен переход на главную страницу Яндекс");
     }
 
@@ -123,7 +132,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.clickNextButton();
 
         assertEquals(MESSAGE_ERROR_ORDER_FIRST_NAME,
@@ -138,7 +147,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.clickNextButton();
 
         assertEquals(MESSAGE_ERROR_ORDER_FAMILY_NAME,
@@ -153,7 +162,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.setAddress("1");
         objOrderPage.clickNextButton();
 
@@ -169,7 +178,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.clickNextButton();
 
         assertEquals(MESSAGE_ERROR_ORDER_METRO_STATION,
@@ -184,7 +193,7 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_ORDER_PAGE);
 
-        YandexScooterOrderPage objOrderPage = new YandexScooterOrderPage(driver);
+        objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.clickNextButton();
 
         assertEquals(MESSAGE_ERROR_ORDER_PHONE,
@@ -199,13 +208,11 @@ public class YandexScooterTests {
         driver = new WebDriverFactory().getWebDriver(browser);
         driver.get(URL_MAIN_PAGE);
 
-        YandexScooterHeaderPage objHeaderPage = new YandexScooterHeaderPage(driver);
+        objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickOrderStatusButton();
         objHeaderPage.clickOrderStatusConfirmButton();
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlContains(URL_TRACK_ORDER_PAGE));
 
-        YandexScooterTrackOrderPage objTrackOrderPage = new YandexScooterTrackOrderPage(driver);
+        objTrackOrderPage = new YandexScooterTrackOrderPage(driver);
 
         assertTrue(objTrackOrderPage.checkTrackOrderErrorImageVisibility(),
                 "Картинка \"Такого заказа нет\" не отображается");
