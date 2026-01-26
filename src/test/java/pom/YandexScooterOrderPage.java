@@ -24,7 +24,7 @@ public class YandexScooterOrderPage {
     private final By metroStation =
             By.xpath("//*[@class='select-search__select']//button[@value='1']");
     // Поле "Телефон" на первой форме заказа
-    private final By telNumberField =
+    private final By phoneNumberField =
             By.xpath("//*[@class='Order_Form__17u6u']//input[contains(@placeholder, 'Телефон')]");
     // Кнопка "Далее" на первой форме заказа
     private final By nextButton =
@@ -99,11 +99,11 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Телефон" переданный параметр
-     * @param newTelNumber новое значение для заполнения поля
+     * @param newPhoneNumber новое значение для заполнения поля
      */
-    public void setTelNumber(String newTelNumber) {
-        checkAndClearField(telNumberField);
-        driver.findElement(telNumberField).sendKeys(newTelNumber);
+    public void setPhoneNumber(String newPhoneNumber) {
+        checkAndClearField(phoneNumberField);
+        driver.findElement(phoneNumberField).sendKeys(newPhoneNumber);
     }
 
     /**
@@ -156,17 +156,17 @@ public class YandexScooterOrderPage {
      * @param newFirstName новое значение для заполнения поля "Имя"
      * @param newFamilyName новое значение для заполнения поля "Фамилия"
      * @param newAddress новое значение для заполнения поля "Адресс"
-     * @param newTelNumber новое значение для заполнения поля "Номер телефона"
+     * @param newPhoneNumber новое значение для заполнения поля "Номер телефона"
      */
     public void createOrderViaHeaderOrderButton(
             String newFirstName, String newFamilyName,
-            String newAddress, String newTelNumber
+            String newAddress, String newPhoneNumber
             ) {
         setFirstName(newFirstName);
         setFamilyName(newFamilyName);
         setAddress(newAddress);
         setMetroStation();
-        setTelNumber(newTelNumber);
+        setPhoneNumber(newPhoneNumber);
         clickNextButton();
         setOrderDateField();
         setRentTimeFieldField();

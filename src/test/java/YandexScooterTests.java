@@ -49,7 +49,7 @@ public class YandexScooterTests {
                 client.getFirstName(),
                 client.getFamilyName(),
                 client.getAddress(),
-                client.getTelNumber()
+                client.getPhoneNumber()
         );
 
         assertTrue(objOrderPage.getCompleteOrderTitleText().contains(TITLE_COMPLETE_ORDER_FORM),
@@ -72,7 +72,7 @@ public class YandexScooterTests {
                 client.getFirstName(),
                 client.getFamilyName(),
                 client.getAddress(),
-                client.getTelNumber()
+                client.getPhoneNumber()
         );
 
         assertTrue(objOrderPage.getCompleteOrderTitleText().contains(TITLE_COMPLETE_ORDER_FORM),
