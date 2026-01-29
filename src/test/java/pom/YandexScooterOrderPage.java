@@ -3,10 +3,8 @@ package pom;
 import lombok.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import org.openqa.selenium.WebElement;
+import utils.WaitUtils;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
@@ -66,8 +64,7 @@ public class YandexScooterOrderPage {
     public String getErrorMessage(By fieldPath) {
         By errorMessage =
                 with(By.xpath("//*[contains(@class,'Error')]")).near(fieldPath);
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        WaitUtils.waitToBeVisibable(driver, errorMessage);
         return driver.findElement(errorMessage).getText();
     }
 
@@ -115,9 +112,9 @@ public class YandexScooterOrderPage {
      * Метод выбирает в поле "Станция метро" станцию
      */
     public void setMetroStation() {
-        driver.findElement(metroStationField).click();
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(driver.findElement(metroStation)));
+        WebElement webElement = driver.findElement(metroStationField);
+        webElement.click();
+        WaitUtils.waitToBeClickable(driver, webElement);
         driver.findElement(metroStation).click();
     }
 
