@@ -1,5 +1,6 @@
 package pom;
 
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +13,7 @@ import java.time.Duration;
 /**
  * Класс хедера страниц Яндекс Самокат
  */
+@RequiredArgsConstructor
 public class YandexScooterHeaderPage {
     private final WebDriver driver;
     // Кнопка "Заказать" в хедере
@@ -25,10 +27,6 @@ public class YandexScooterHeaderPage {
     // Кнопка "Go!" при вводе номера заказа в хедере
     private final By orderStatusConfirmButton =
             By.xpath("//button[contains(@class,'Header_Button__28dPO')]");
-
-    public YandexScooterHeaderPage(WebDriver driver) {
-        this.driver = driver;
-    }
 
     /**
      * Метод нажимает на нопку "Заказать" в хедере
