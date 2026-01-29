@@ -1,5 +1,7 @@
 package pom;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +16,8 @@ import static org.openqa.selenium.support.locators.RelativeLocator.with;
 /**
  * Класс заглавной страницы Яндекс Самокат
  */
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class YandexScooterHomePage {
     private final WebDriver driver;
     private String faqSpoilerTitle;
@@ -21,20 +25,12 @@ public class YandexScooterHomePage {
     private final By orderButton =
             By.xpath("//*[@class='Home_FinishButton__1_cWm']/button");
 
-    public YandexScooterHomePage(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public YandexScooterHomePage(WebDriver driver, String faqSpoilerTitle) {
-        this.driver = driver;
-        this.faqSpoilerTitle = faqSpoilerTitle;
-    }
-
     /**
      * Вспомогательный метод для получения WebElement выпадающего списка в разделе «Вопросы о важном»
+     *
      * @return WebElement
      */
-    private WebElement getFaqSpoilerWebElement(){
+    private WebElement getFaqSpoilerWebElement() {
         return driver.findElement(By.xpath(".//*[text()='" + faqSpoilerTitle + "']"));
     }
 
@@ -42,7 +38,7 @@ public class YandexScooterHomePage {
      * Метод нажимает на выпадающий список в разделе «Вопросы о важном»
      */
     public void clickFaqSpoiler() {
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", getFaqSpoilerWebElement());
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", getFaqSpoilerWebElement());
         new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(ExpectedConditions.elementToBeClickable(getFaqSpoilerWebElement()));
         getFaqSpoilerWebElement().click();
@@ -50,6 +46,7 @@ public class YandexScooterHomePage {
 
     /**
      * Метод для получения фактического текста из выпадающего списока в разделе «Вопросы о важном»
+     *
      * @return String
      */
     public String getFaqSpoilerDescription() {
@@ -65,7 +62,7 @@ public class YandexScooterHomePage {
      */
     public void clickOrderButton() {
         WebElement element = driver.findElement(orderButton);
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
         new WebDriverWait(driver, Duration.ofSeconds(2))
                 .until(ExpectedConditions.elementToBeClickable(element));
         element.click();
