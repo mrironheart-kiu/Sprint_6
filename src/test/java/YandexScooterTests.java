@@ -3,15 +3,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pom.YandexScooterHeaderPage;
 import pom.YandexScooterHomePage;
 import pom.YandexScooterOrderPage;
 import pom.YandexScooterTrackOrderPage;
 import testdata.Client;
+import utils.WaitUtils;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
@@ -55,8 +53,7 @@ public class YandexScooterTests {
         objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderOrderButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
+        WaitUtils.waitUrlToBe(driver, URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
@@ -77,8 +74,7 @@ public class YandexScooterTests {
         objHomePage = new YandexScooterHomePage(driver);
         objHomePage.clickOrderButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
+        WaitUtils.waitUrlToBe(driver, URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
@@ -112,13 +108,11 @@ public class YandexScooterTests {
         objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderYandexLogo();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.numberOfWindowsToBe(2));
+        WaitUtils.waitNumberOfTabs(driver,2);
         Set<String> windowIds = driver.getWindowHandles();
         ArrayList<String> tabs = new ArrayList<>(windowIds);
         driver.switchTo().window(tabs.get(1));
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlContains(URL_YANDEX_MAIN_PAGE));
+        WaitUtils.waitUrlContains(driver, URL_YANDEX_MAIN_PAGE);
 
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains(URL_YANDEX_MAIN_PAGE),
                 "Не выполнен переход на главную страницу Яндекс");
