@@ -6,10 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import utils.WaitUtils;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
@@ -39,8 +36,7 @@ public class YandexScooterHomePage {
      */
     public void clickFaqSpoiler() {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", getFaqSpoilerWebElement());
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(getFaqSpoilerWebElement()));
+        WaitUtils.waitToBeClickable(driver, getFaqSpoilerWebElement());
         getFaqSpoilerWebElement().click();
     }
 
@@ -52,8 +48,7 @@ public class YandexScooterHomePage {
     public String getFaqSpoilerDescription() {
         By faqSpoilerDescription =
                 with(By.xpath("//*[contains(@id, 'accordion__panel')]")).near(getFaqSpoilerWebElement());
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.visibilityOfElementLocated(faqSpoilerDescription));
+        WaitUtils.waitToBeClickable(driver, getFaqSpoilerWebElement());
         return driver.findElement(faqSpoilerDescription).getText();
     }
 
@@ -61,10 +56,9 @@ public class YandexScooterHomePage {
      * Метод нажимает на кнопку "Заказать" в блоке "Как это работает"
      */
     public void clickOrderButton() {
-        WebElement element = driver.findElement(orderButton);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(element));
-        element.click();
+        WebElement webElement = driver.findElement(orderButton);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", webElement);
+        WaitUtils.waitToBeClickable(driver, webElement);
+        webElement.click();
     }
 }
