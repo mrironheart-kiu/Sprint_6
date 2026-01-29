@@ -177,7 +177,7 @@ public class YandexScooterOrderPage {
      *
      * @param newFirstName   новое значение для заполнения поля "Имя"
      * @param newFamilyName  новое значение для заполнения поля "Фамилия"
-     * @param newAddress     новое значение для заполнения поля "Адресс"
+     * @param newAddress     новое значение для заполнения поля "Адрес"
      * @param newPhoneNumber новое значение для заполнения поля "Номер телефона"
      */
     public void fillFirstOrderFormFields(
@@ -196,7 +196,7 @@ public class YandexScooterOrderPage {
      *
      * @param newFirstName   новое значение для заполнения поля "Имя"
      * @param newFamilyName  новое значение для заполнения поля "Фамилия"
-     * @param newAddress     новое значение для заполнения поля "Адресс"
+     * @param newAddress     новое значение для заполнения поля "Адрес"
      * @param newPhoneNumber новое значение для заполнения поля "Номер телефона"
      */
     public void createOrder(
