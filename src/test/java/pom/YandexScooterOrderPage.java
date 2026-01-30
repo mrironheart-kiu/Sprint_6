@@ -1,17 +1,18 @@
 package pom;
 
+import lombok.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import org.openqa.selenium.WebElement;
+import utils.WaitUtils;
 
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
 
 /**
  * Класс страницы формирования заказа Яндекс Самокат
  */
+@RequiredArgsConstructor
+@Getter
 public class YandexScooterOrderPage {
     private final WebDriver driver;
     // Поле "Имя" на первой форме заказа
@@ -55,53 +56,31 @@ public class YandexScooterOrderPage {
     // Заголовок всплывающего окна об успешном формировании заказа
     private final By completeOrderFormTitle = By.className("Order_ModalHeader__3FDaJ");
 
-    public YandexScooterOrderPage(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public By getFirstNameField() {
-        return firstNameField;
-    }
-
-    public By getFamilyNameField() {
-        return familyNameField;
-    }
-
-    public By getAddressField() {
-        return addressField;
-    }
-
-    public By getMetroStationField() {
-        return metroStationField;
-    }
-
-    public By getPhoneNumberField() {
-        return phoneNumberField;
-    }
-
     /**
      * Метод для получения текста ошибок заполнения полей формы заказа
+     *
      * @return String
      */
     public String getErrorMessage(By fieldPath) {
         By errorMessage =
                 with(By.xpath("//*[contains(@class,'Error')]")).near(fieldPath);
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.visibilityOfElementLocated(errorMessage));
+        WaitUtils.waitToBeVisibable(driver, errorMessage);
         return driver.findElement(errorMessage).getText();
     }
 
     /**
      * Вспомогательный метод для заполнения значений полей на странце заказа Яндекс Самокат
+     *
      * @param fieldName селектор для веб-элемента
      */
-    private void checkAndClearField(By fieldName){
+    private void checkAndClearField(By fieldName) {
         driver.findElement(fieldName).isEnabled();
         driver.findElement(fieldName).clear();
     }
 
     /**
      * Метод записывает в поле "Имя" переданный параметр
+     *
      * @param newFirstName новое значение для заполнения поля
      */
     public void setFirstName(String newFirstName) {
@@ -111,6 +90,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Фамилия" переданный параметр
+     *
      * @param newFamilyName новое значение для заполнения поля
      */
     public void setFamilyName(String newFamilyName) {
@@ -120,6 +100,7 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод записывает в поле "Фамилия" переданный параметр
+     *
      * @param newAddress новое значение для заполнения поля
      */
     public void setAddress(String newAddress) {
@@ -131,14 +112,15 @@ public class YandexScooterOrderPage {
      * Метод выбирает в поле "Станция метро" станцию
      */
     public void setMetroStation() {
-        driver.findElement(metroStationField).click();
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(driver.findElement(metroStation)));
+        WebElement webElement = driver.findElement(metroStationField);
+        webElement.click();
+        WaitUtils.waitToBeClickable(driver, webElement);
         driver.findElement(metroStation).click();
     }
 
     /**
      * Метод записывает в поле "Телефон" переданный параметр
+     *
      * @param newPhoneNumber новое значение для заполнения поля
      */
     public void setPhoneNumber(String newPhoneNumber) {
@@ -192,9 +174,10 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод заполняет поля на первой форме заказа
-     * @param newFirstName новое значение для заполнения поля "Имя"
-     * @param newFamilyName новое значение для заполнения поля "Фамилия"
-     * @param newAddress новое значение для заполнения поля "Адресс"
+     *
+     * @param newFirstName   новое значение для заполнения поля "Имя"
+     * @param newFamilyName  новое значение для заполнения поля "Фамилия"
+     * @param newAddress     новое значение для заполнения поля "Адрес"
      * @param newPhoneNumber новое значение для заполнения поля "Номер телефона"
      */
     public void fillFirstOrderFormFields(
@@ -210,21 +193,22 @@ public class YandexScooterOrderPage {
 
     /**
      * Метод формирует заказ самоката через кнопку "Заказать" в хедере страницы
-     * @param newFirstName новое значение для заполнения поля "Имя"
-     * @param newFamilyName новое значение для заполнения поля "Фамилия"
-     * @param newAddress новое значение для заполнения поля "Адресс"
+     *
+     * @param newFirstName   новое значение для заполнения поля "Имя"
+     * @param newFamilyName  новое значение для заполнения поля "Фамилия"
+     * @param newAddress     новое значение для заполнения поля "Адрес"
      * @param newPhoneNumber новое значение для заполнения поля "Номер телефона"
      */
     public void createOrder(
             String newFirstName, String newFamilyName,
             String newAddress, String newPhoneNumber
-            ) {
+    ) {
         fillFirstOrderFormFields(
                 newFirstName,
                 newFamilyName,
                 newAddress,
                 newPhoneNumber
-                );
+        );
         clickNextButton();
         setOrderDateField();
         setRentTimeFieldField();

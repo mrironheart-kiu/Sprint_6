@@ -1,23 +1,20 @@
-import constants.Browser;
 import factory.WebDriverFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pom.YandexScooterHeaderPage;
 import pom.YandexScooterHomePage;
 import pom.YandexScooterOrderPage;
 import pom.YandexScooterTrackOrderPage;
 import testdata.Client;
+import utils.WaitUtils;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
+import static constants.Browser.*;
 import static constants.ErrorMessage.*;
 import static constants.FormTitle.*;
 import static constants.Url.*;
@@ -34,10 +31,14 @@ public class YandexScooterTests {
     // Страница поиска заказа сайт "Яндекс Самокат"
     private YandexScooterTrackOrderPage objTrackOrderPage;
 
+    @BeforeEach
+    void setUp() {
+        driver = new WebDriverFactory().getWebDriver(CHROME);
+    }
+
     @ParameterizedTest
     @MethodSource("testdata.ParameterizedTestData#faqTestData")
-    void faqSpoilerDescriptionTest(Browser browser, String faqTitle, String expectedResult) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void faqSpoilerDescriptionTest(String faqTitle, String expectedResult) {
         driver.get(URL_MAIN_PAGE);
         objHomePage = new YandexScooterHomePage(driver, faqTitle);
         objHomePage.clickFaqSpoiler();
@@ -47,14 +48,12 @@ public class YandexScooterTests {
 
     @ParameterizedTest
     @MethodSource("testdata.ParameterizedTestData#orderTestData")
-    void completeOrderViaHeaderOrderButton(Browser browser, Client client) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void completeOrderViaHeaderOrderButton(Client client) {
         driver.get(URL_MAIN_PAGE);
         objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderOrderButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
+        WaitUtils.waitUrlToBe(driver, URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
@@ -70,14 +69,12 @@ public class YandexScooterTests {
 
     @ParameterizedTest
     @MethodSource("testdata.ParameterizedTestData#orderTestData")
-    void completeOrderViaMiddleOrderButton(Browser browser, Client client) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void completeOrderViaMiddleOrderButton(Client client) {
         driver.get(URL_MAIN_PAGE);
         objHomePage = new YandexScooterHomePage(driver);
         objHomePage.clickOrderButton();
 
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlToBe(URL_ORDER_PAGE));
+        WaitUtils.waitUrlToBe(driver, URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
         objOrderPage.createOrder(
@@ -91,10 +88,9 @@ public class YandexScooterTests {
                 "Не найдено форма об успешном формировании заказа");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
-    void scooterLogoRedirectsToMainPage(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    @Test
+    @DisplayName("Клик по надписи \"Самокат\" в логотипе в хедере переводит на главную страницу сайта \"Яндекс.Самокат\"")
+    void scooterLogoRedirectsToMainPage() {
         driver.get(URL_ORDER_PAGE);
 
         objHeaderPage = new YandexScooterHeaderPage(driver);
@@ -104,32 +100,27 @@ public class YandexScooterTests {
                 "Не выполнен переход на главную страницу Яндекс Самокат");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
-    void yandexLogoRedirectsToYandexMainPage(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    @Test
+    @DisplayName("Клик по надписи \"Яндекс\" в логотипе в хедере переводит на главную страницу сайта \"Яндекс\"")
+    void yandexLogoRedirectsToYandexMainPage() {
         driver.get(URL_MAIN_PAGE);
 
         objHeaderPage = new YandexScooterHeaderPage(driver);
         objHeaderPage.clickHeaderYandexLogo();
 
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.numberOfWindowsToBe(2));
+        WaitUtils.waitNumberOfTabs(driver,2);
         Set<String> windowIds = driver.getWindowHandles();
         ArrayList<String> tabs = new ArrayList<>(windowIds);
         driver.switchTo().window(tabs.get(1));
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.urlContains(URL_YANDEX_MAIN_PAGE));
+        WaitUtils.waitUrlContains(driver, URL_YANDEX_MAIN_PAGE);
 
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains(URL_YANDEX_MAIN_PAGE),
                 "Не выполнен переход на главную страницу Яндекс");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается корректный текст ошибки для поля \"Имя\" первой формы заказа")
-    void orderPageFirstNameFieldDisplaysErrorMessages(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void orderPageFirstNameFieldDisplaysErrorMessages() {
         driver.get(URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
@@ -140,11 +131,9 @@ public class YandexScooterTests {
                 "Текст ошибки не соответствует ожидаемому");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается корректный текст ошибки для поля \"Фамилия\" первой формы заказа")
-    void orderPageFamilyNameFieldDisplaysErrorMessages(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void orderPageFamilyNameFieldDisplaysErrorMessages() {
         driver.get(URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
@@ -155,11 +144,9 @@ public class YandexScooterTests {
                 "Текст ошибки не соответствует ожидаемому");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается корректный текст ошибки для поля \"Адрес\" первой формы заказа")
-    void orderPageAddressFieldDisplaysErrorMessages(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void orderPageAddressFieldDisplaysErrorMessages() {
         driver.get(URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
@@ -171,11 +158,9 @@ public class YandexScooterTests {
                 "Текст ошибки не соответствует ожидаемому");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается корректный текст ошибки для поля \"Станция метро\" первой формы заказа")
-    void orderPageMetroStationFieldDisplaysErrorMessages(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void orderPageMetroStationFieldDisplaysErrorMessages() {
         driver.get(URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
@@ -186,11 +171,9 @@ public class YandexScooterTests {
                 "Текст ошибки не соответствует ожидаемому");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается корректный текст ошибки для поля \"Телефон\" первой формы заказа")
-    void orderPagePhoneNumberFieldDisplaysErrorMessages(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void orderPagePhoneNumberFieldDisplaysErrorMessages() {
         driver.get(URL_ORDER_PAGE);
 
         objOrderPage = new YandexScooterOrderPage(driver);
@@ -201,11 +184,9 @@ public class YandexScooterTests {
                 "Текст ошибки не соответствует ожидаемому");
     }
 
-    @ParameterizedTest
-    @MethodSource("testdata.ParameterizedTestData#browserTestData")
+    @Test
     @DisplayName("Отображается картинка о том что заказ не существует")
-    void trackOrderPageDisplaysErrorImage(Browser browser) {
-        driver = new WebDriverFactory().getWebDriver(browser);
+    void trackOrderPageDisplaysErrorImage() {
         driver.get(URL_MAIN_PAGE);
 
         objHeaderPage = new YandexScooterHeaderPage(driver);

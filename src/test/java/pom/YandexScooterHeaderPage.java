@@ -1,17 +1,16 @@
 package pom;
 
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import utils.WaitUtils;
 
 /**
  * Класс хедера страниц Яндекс Самокат
  */
+@RequiredArgsConstructor
 public class YandexScooterHeaderPage {
     private final WebDriver driver;
     // Кнопка "Заказать" в хедере
@@ -26,19 +25,14 @@ public class YandexScooterHeaderPage {
     private final By orderStatusConfirmButton =
             By.xpath("//button[contains(@class,'Header_Button__28dPO')]");
 
-    public YandexScooterHeaderPage(WebDriver driver) {
-        this.driver = driver;
-    }
-
     /**
      * Метод нажимает на нопку "Заказать" в хедере
      */
     public void clickHeaderOrderButton() {
-        WebElement element = driver.findElement(faqSpoilerTitle);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.elementToBeClickable(element));
-        element.click();
+        WebElement webElement = driver.findElement(faqSpoilerTitle);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", webElement);
+        WaitUtils.waitToBeClickable(driver, webElement);
+        webElement.click();
     }
 
     /**
@@ -66,8 +60,7 @@ public class YandexScooterHeaderPage {
      * Метод нажимает на кнопку "Go!" при вводе номера заказа в хедере
      */
     public void clickOrderStatusConfirmButton() {
-        new WebDriverWait(driver, Duration.ofSeconds(2))
-                .until(ExpectedConditions.visibilityOfElementLocated(orderStatusConfirmButton));
+        WaitUtils.waitToBeVisibable(driver, orderStatusConfirmButton);
         driver.findElement(orderStatusConfirmButton).click();
     }
 }
