@@ -5,7 +5,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Getter
-@Builder(toBuilder=true)
+@Builder(toBuilder = true)
 @ToString
 public class Client {
     private final String firstName;
